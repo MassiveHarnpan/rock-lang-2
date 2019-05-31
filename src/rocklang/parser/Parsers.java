@@ -1,6 +1,7 @@
 package rocklang.parser;
 
 import rocklang.ast.BlockStmt;
+import rocklang.ast.ClosedExpression;
 import rocklang.ast.Expression;
 import rocklang.ast.IfStmt;
 import rocklang.token.TokenType;
@@ -45,24 +46,27 @@ public class Parsers {
         Parser decimal = decimal();
         Parser string = string();
         Parser numebr = fork(integer, decimal);
-        Parser literalValue = fork(integer, decimal, string);
+        Parser variableName = new TokenParser(TokenType.NAME);
+        Parser literalValue = fork(decimal, integer, string, variableName);
 
 
 
         ForkParser expr = fork();
-        Parser closedExpression = sequence().skip("(").then(expr).skip(")");
+        Parser closedExpression = sequence().skip("(").then(expr).skip(")").asAST(ClosedExpression.class);
 
         Parser base = fork(closedExpression, literalValue);
         Parser powerExpression = PatternParser.builder()
                 .element(base)
                 .splitter("^")
                 .atLeastOneElement()
+                .recordSplitter()
                 .build()
                 .asAST(Expression.class);
         Parser term = PatternParser.builder()
                 .element(powerExpression)
                 .splitter("*", "/", "%")
                 .atLeastOneElement()
+                .recordSplitter()
                 .build()
                 .asAST(Expression.class);
         Parser prefix = sequence().then("+", "-", "!").then(term);
@@ -70,18 +74,21 @@ public class Parsers {
                 .element(fork(prefix, term))
                 .splitter("+", "-")
                 .atLeastOneElement()
+                .recordSplitter()
                 .build()
                 .asAST(Expression.class);
         Parser compareExpression = PatternParser.builder()
                 .element(numberingExpression)
                 .splitter(">", "<", ">=", "<=", "==", "!=")
                 .atLeastOneElement()
+                .recordSplitter()
                 .build()
                 .asAST(Expression.class);
         Parser logicExpression = PatternParser.builder()
                 .element(compareExpression)
                 .splitter("&&", "||")
                 .atLeastOneElement()
+                .recordSplitter()
                 .build()
                 .asAST(Expression.class);
         expr.or(closedExpression).or(logicExpression);

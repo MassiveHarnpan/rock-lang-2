@@ -65,6 +65,14 @@ public class Tester {
         TokenStream ts = new TokenStream(document);
         Parser parser = Parsers.createProgramParser();
         AST ast = parser.parse(ts);
+        if (ast != null) {
+            ast = ast.simplify();
+        }
+        System.out.println("==showAST==");
+        showAST(ast, 0);
+
+        System.out.println("==AST.format()==");
+
         FormatStream fs = new FormatStream(System.out, "    ");
         if (ast != null) {
             ast.format(fs);
@@ -88,7 +96,11 @@ public class Tester {
     public static String makeIndent(int layer) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < layer; i++) {
-            builder.append("    ");
+            if (i == layer - 1) {
+                builder.append("|-- ");
+            } else {
+                builder.append("|---");
+            }
         }
         return builder.toString();
     }

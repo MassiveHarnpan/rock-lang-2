@@ -50,6 +50,15 @@ public class ASTList implements AST {
     }
 
     @Override
+    public AST simplify() {
+        AST[] newChildren = new AST[children.length];
+        for (int i = 0; i < children.length; i++) {
+            newChildren[i] = children[i].simplify();
+        }
+        return new ASTList(newChildren);
+    }
+
+    @Override
     public void format(FormatStream fs) throws IOException {
         for (AST ast : children) {
             ast.format(fs);

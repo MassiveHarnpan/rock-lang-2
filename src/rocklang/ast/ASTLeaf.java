@@ -50,8 +50,13 @@ public class ASTLeaf implements AST {
     }
 
     @Override
+    public AST simplify() {
+        return this;
+    }
+
+    @Override
     public void format(FormatStream fs) throws IOException {
-        fs.print(String.valueOf(token.value()));
+        fs.print(String.valueOf(token.literal()));
     }
 
     @Override

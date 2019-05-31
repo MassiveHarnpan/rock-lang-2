@@ -26,5 +26,7 @@ public interface AST {
     Object value(Enviroument env, Object base);
     Object assign(Enviroument env, Object base);
 
+    AST simplify();
+
     void format(FormatStream fs) throws IOException;
 }

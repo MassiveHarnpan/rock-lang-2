@@ -15,15 +15,16 @@ public class PatternParser extends NonTerminateParser {
     private Parser elementParser;
     private Parser splitterParser;
     private boolean atLeastOneElement;
+    private boolean recordSplitter;
     private boolean allowEmptyElement;
 
-
-    public PatternParser(Parser prefixParser, Parser suffixParser, Parser elementParser, Parser splitterParser, boolean atLeastOneElement, boolean allowEmptyElement) {
+    public PatternParser(Parser prefixParser, Parser suffixParser, Parser elementParser, Parser splitterParser, boolean atLeastOneElement, boolean recordSplitter, boolean allowEmptyElement) {
         this.prefixParser = prefixParser;
         this.suffixParser = suffixParser;
         this.elementParser = elementParser;
         this.splitterParser = splitterParser;
         this.atLeastOneElement = atLeastOneElement;
+        this.recordSplitter = recordSplitter;
         this.allowEmptyElement = allowEmptyElement;
     }
 
@@ -36,7 +37,7 @@ public class PatternParser extends NonTerminateParser {
 
         if (elementParser != null && elementParser.parse(ts, scope)) {
             while (true) {
-                if (splitterParser != null && !splitterParser.parse(ts, res)) {
+                if (splitterParser != null && !splitterParser.parse(ts, recordSplitter ? scope : res)) {
                     break;
                 }
                 if (!elementParser.parse(ts, scope)) {
@@ -74,6 +75,7 @@ public class PatternParser extends NonTerminateParser {
         private Parser elementParser = null;
         private Parser splitterParser = null;
         private boolean atLeastOneElement = false;
+        private boolean recordSplitter = false;
         private boolean allowEmptyElement = false;
 
         public Builder prefix(Parser prefixParser) {
@@ -130,6 +132,13 @@ public class PatternParser extends NonTerminateParser {
             return this;
         }
 
+        public Builder recordSplitter() {
+            this.recordSplitter = true;
+            return this;
+        }
+
+
+
 
 
 
@@ -140,6 +149,7 @@ public class PatternParser extends NonTerminateParser {
                     this.elementParser,
                     this.splitterParser,
                     this.atLeastOneElement,
+                    this.recordSplitter,
                     this.allowEmptyElement);
         }
     }

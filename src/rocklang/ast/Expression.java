@@ -9,6 +9,17 @@ public class Expression extends ASTList {
         super(children);
     }
 
+    @Override
+    public AST simplify() {
+        if (childCount() == 1) {
+            return child(0).simplify();
+        }
+        AST[] newChildren = new AST[childCount()];
+        for (int i = 0; i < childCount(); i++) {
+            newChildren[i] = child(i).simplify();
+        }
+        return new Expression(newChildren);
+    }
 
     @Override
     public void format(FormatStream fs) throws IOException {

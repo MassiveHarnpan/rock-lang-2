@@ -1,6 +1,7 @@
 package rocklang.parser;
 
 import rocklang.ast.BlockStmt;
+import rocklang.ast.Expression;
 import rocklang.ast.IfStmt;
 import rocklang.token.TokenType;
 
@@ -46,6 +47,48 @@ public class Parsers {
         Parser numebr = fork(integer, decimal);
         Parser literalValue = fork(integer, decimal, string);
 
+
+
+        ForkParser expr = fork();
+        Parser closedExpression = sequence().skip("(").then(expr).skip(")");
+
+        Parser base = fork(closedExpression, literalValue);
+        Parser powerExpression = PatternParser.builder()
+                .element(base)
+                .splitter("^")
+                .atLeastOneElement()
+                .build()
+                .asAST(Expression.class);
+        Parser term = PatternParser.builder()
+                .element(powerExpression)
+                .splitter("*", "/", "%")
+                .atLeastOneElement()
+                .build()
+                .asAST(Expression.class);
+        Parser prefix = sequence().then("+", "-", "!").then(term);
+        Parser numberingExpression = PatternParser.builder()
+                .element(fork(prefix, term))
+                .splitter("+", "-")
+                .atLeastOneElement()
+                .build()
+                .asAST(Expression.class);
+        Parser compareExpression = PatternParser.builder()
+                .element(numberingExpression)
+                .splitter(">", "<", ">=", "<=", "==", "!=")
+                .atLeastOneElement()
+                .build()
+                .asAST(Expression.class);
+        Parser logicExpression = PatternParser.builder()
+                .element(compareExpression)
+                .splitter("&&", "||")
+                .atLeastOneElement()
+                .build()
+                .asAST(Expression.class);
+        expr.or(closedExpression).or(logicExpression);
+
+
+
+
         Parser blockStmt = PatternParser.builder()
                 .prefix("{")
                 .element(literalValue)
@@ -62,7 +105,7 @@ public class Parsers {
 
 
 
-        return ifStmt;
+        return expr;
     }
 
 

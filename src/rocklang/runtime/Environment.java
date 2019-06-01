@@ -1,20 +1,21 @@
 package rocklang.runtime;
 
+import rocklang.util.Functions;
+
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
-public class Enviroument {
+public class Environment {
 
-    private Enviroument parent;
-    private Map<String, Object> variables = new HashMap<>();
+    private Environment parent;
+    private Map<String, Rock> variables = new HashMap<>();
 
 
-    public Enviroument(Enviroument parent) {
+    public Environment(Environment parent) {
         this.parent = parent;
     }
 
-    public Enviroument() {
+    public Environment() {
         this.parent = null;
     }
 
@@ -24,22 +25,46 @@ public class Enviroument {
         return parent == null;
     }
 
-    public Enviroument root() {
+    public Environment root() {
         return parent == null ? this : parent.root();
     }
 
-    public Object get(String variableName) {
-        return variables.get(variableName);
+    public Environment find(String variableName) {
+        if (this.variables.containsKey(variableName)) {
+            return this;
+        }
+        if (isRoot()) {
+            return this;
+        } else {
+            return parent.find(variableName);
+        }
     }
 
 
-    public Object set(String variableName, Object value) {
-        return variables.put(variableName, value);
+
+    public boolean has(String variableName) {
+        return find(variableName).variables.containsKey(variableName);
     }
 
-    public Object delete(String variableName) {
-        return variables.remove(variableName);
+    public Rock get(String variableName) {
+        return find(variableName).variables.get(variableName);
     }
 
 
+    public Rock set(String variableName, Rock value) {
+        return find(variableName).variables.put(variableName, value);
+    }
+
+    public Rock delete(String variableName) {
+        return find(variableName).variables.remove(variableName);
+    }
+
+
+
+
+    public static Environment getDefaultEnvironment() {
+        Environment environment = new Environment();
+        environment.set("print", new RockFunction(environment, new String[] {"msg"}, Functions.PRINT));
+        return environment;
+    }
 }

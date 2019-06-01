@@ -1,5 +1,6 @@
 package rocklang.tokenizer;
 
+import rocklang.runtime.RockNumber;
 import rocklang.token.Token;
 import rocklang.token.TokenType;
 import rocklang.util.DocumentIndex;
@@ -18,6 +19,6 @@ public class IntegerTokenizer extends Tokenizer {
         DocumentRange range = ds.rangeFrom(startIndex);
         String literal = range.cut();
         int value = Integer.valueOf(literal);
-        return new Token(TokenType.INTEGER, range, literal, value);
+        return new Token(TokenType.INTEGER, range, literal, new RockNumber(value));
     }
 }

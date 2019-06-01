@@ -1,6 +1,8 @@
 package rocklang.ast;
 
-import rocklang.runtime.Enviroument;
+import rocklang.exception.RockException;
+import rocklang.runtime.Environment;
+import rocklang.runtime.Rock;
 import rocklang.token.Token;
 import rocklang.util.FormatStream;
 
@@ -23,8 +25,8 @@ public interface AST {
 
 
 
-    Object value(Enviroument env, Object base);
-    Object assign(Enviroument env, Object base);
+    Rock value(Environment env, Rock base) throws RockException;
+    Rock assign(Environment env, Rock base, Rock value) throws RockException;
 
     AST simplify();
 

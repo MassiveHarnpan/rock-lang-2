@@ -1,9 +1,14 @@
 package rocklang.ast;
 
-import rocklang.runtime.Enviroument;
+import rocklang.exception.RockException;
+import rocklang.runtime.Environment;
+import rocklang.runtime.Rock;
+import rocklang.runtime.RockNil;
 import rocklang.util.FormatStream;
 
 import java.io.IOException;
+
+import static rocklang.util.Utils.simplifyASTList;
 
 public class IfStmt extends ASTList {
     public IfStmt(AST[] children) {
@@ -23,9 +28,20 @@ public class IfStmt extends ASTList {
     }
 
     @Override
-    public Object value(Enviroument env, Object base) {
-        return super.value(env, base);
+    public Rock value(Environment env, Rock base) throws RockException {
+        if (condition().value(env, base).getBoolean()) {
+            return thenStmt().value(env, null);
+        } else if (childCount() >= 3) {
+            return elseStmt().value(env, null);
+        }
+        return RockNil.NIL;
     }
+
+    @Override
+    public AST simplify() {
+        return new IfStmt(simplifyASTList(children()));
+    }
+
 
     @Override
     public void format(FormatStream fs) throws IOException {

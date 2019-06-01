@@ -1,6 +1,8 @@
 package rocklang.ast;
 
-import rocklang.runtime.Enviroument;
+import rocklang.exception.RockException;
+import rocklang.runtime.Environment;
+import rocklang.runtime.Rock;
 import rocklang.token.Token;
 import rocklang.util.FormatStream;
 
@@ -40,13 +42,12 @@ public class ASTLeaf implements AST {
     }
 
     @Override
-    public Object value(Enviroument env, Object base) {
+    public Rock value(Environment env, Rock base) {
         return token.value();
     }
 
-    @Override
-    public Object assign(Enviroument env, Object base) {
-        return null;
+    public Rock assign(Environment env, Rock base, Rock value) throws RockException {
+        throw new RockException("cannot assign to a literal");
     }
 
     @Override
@@ -56,7 +57,7 @@ public class ASTLeaf implements AST {
 
     @Override
     public void format(FormatStream fs) throws IOException {
-        fs.print(String.valueOf(token.literal()));
+        fs.print(token.literal());
     }
 
     @Override

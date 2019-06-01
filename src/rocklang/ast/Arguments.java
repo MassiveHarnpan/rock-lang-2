@@ -3,41 +3,42 @@ package rocklang.ast;
 import rocklang.exception.RockException;
 import rocklang.runtime.Environment;
 import rocklang.runtime.Rock;
-import rocklang.runtime.RockNil;
 import rocklang.util.FormatStream;
 
 import java.io.IOException;
 
 import static rocklang.util.Utils.simplifyASTList;
 
-public class BlockStmt extends ASTList {
-    public BlockStmt(AST[] children) {
+public class Arguments extends ASTList {
+    public Arguments(AST[] children) {
         super(children);
     }
 
-
     @Override
     public Rock value(Environment env, Rock base) throws RockException {
-        Rock result = RockNil.NIL;
+        Rock[] arguments = new Rock[childCount()];
         for (int i = 0; i < childCount(); i++) {
-            result = child(i).value(env, null);
+            arguments[i] = child(i).value(env, null);
         }
-        return result;
+        return base.invoke(arguments);
     }
 
     @Override
     public AST simplify() {
-        return new BlockStmt(simplifyASTList(children()));
+        return new Arguments(simplifyASTList(children()));
     }
 
     @Override
     public void format(FormatStream fs) throws IOException {
-        fs.print("{").levelUp();
+        fs.print("(");
+        fs.levelUp();
         for (int i = 0; i < childCount(); i++) {
-            fs.newLine();
             child(i).format(fs);
-            fs.print(";");
+            if (i != childCount() - 1) {
+                fs.print(", ");
+            }
         }
-        fs.levelDown().newLine().print("}");
+        fs.levelDown();
+        fs.print(")");
     }
 }

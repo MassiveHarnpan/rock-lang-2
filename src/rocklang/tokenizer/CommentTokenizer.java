@@ -1,5 +1,6 @@
 package rocklang.tokenizer;
 
+import rocklang.runtime.RockString;
 import rocklang.token.Token;
 import rocklang.token.TokenType;
 import rocklang.util.DocumentIndex;
@@ -15,6 +16,6 @@ public class CommentTokenizer extends Tokenizer {
         ds.skipToNextLine();
         DocumentRange range = ds.rangeFrom(startIndex);
         String literal = ds.getDocument().range(range);
-        return new Token(TokenType.COMMENT, range, literal, literal.substring(1));
+        return new Token(TokenType.COMMENT, range, literal, new RockString(literal.substring(1)));
     }
 }

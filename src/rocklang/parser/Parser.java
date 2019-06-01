@@ -10,6 +10,11 @@ import java.util.List;
 
 public abstract class Parser {
 
+    public static boolean debug = false;
+    public static int layer = 0;
+
+    protected String name = getClass().getSimpleName();
+
     protected ASTFactory factory;
     protected boolean asAst = false;
 
@@ -21,6 +26,11 @@ public abstract class Parser {
 
     public Parser asAST() {
         this.asAst = true;
+        return this;
+    }
+
+    public Parser named(String name) {
+        this.name = name;
         return this;
     }
 

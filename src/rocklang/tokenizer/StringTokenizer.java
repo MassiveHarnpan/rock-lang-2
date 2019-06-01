@@ -1,5 +1,6 @@
 package rocklang.tokenizer;
 
+import rocklang.runtime.RockString;
 import rocklang.token.Token;
 import rocklang.token.TokenType;
 import rocklang.util.DocumentIndex;
@@ -37,7 +38,7 @@ public class StringTokenizer extends Tokenizer {
         }
 
         DocumentRange range = ds.rangeFrom(startIndex);
-        return new Token(TokenType.STRING, range, ds.getDocument().range(range), builder.toString());
+        return new Token(TokenType.STRING, range, ds.getDocument().range(range), new RockString(builder.toString()));
     }
 
     private char readEscape(DocumentStream ds) {

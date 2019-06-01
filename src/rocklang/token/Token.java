@@ -1,8 +1,7 @@
 package rocklang.token;
 
+import rocklang.runtime.Rock;
 import rocklang.util.DocumentRange;
-
-import java.util.Objects;
 
 public class Token {
 
@@ -10,10 +9,10 @@ public class Token {
     private TokenType type;
     private DocumentRange range;
     private String literal;
-    private Object value;
+    private Rock value;
 
 
-    public Token(TokenType type, DocumentRange range, String literal, Object value) {
+    public Token(TokenType type, DocumentRange range, String literal, Rock value) {
         this.type = type;
         this.range = range;
         this.literal = literal;
@@ -28,20 +27,8 @@ public class Token {
         return type;
     }
 
-    public Object value() {
-        return value;
-    }
-
-    public int getInteger() {
-        return (int) this.value;
-    }
-
-    public double getFloat() {
-        return (double) this.value;
-    }
-
-    public String getString() {
-        return (String) this.value;
+    public Rock value() {
+        return this.value;
     }
 
     public String literal() {

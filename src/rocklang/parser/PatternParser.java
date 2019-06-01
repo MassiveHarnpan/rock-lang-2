@@ -41,7 +41,7 @@ public class PatternParser extends NonTerminateParser {
                     break;
                 }
                 if (!elementParser.parse(ts, scope)) {
-                    if (!allowEmptyElement) {
+                    if (splitterParser != null && !allowEmptyElement) {
                         return false;
                     } else {
                         break;

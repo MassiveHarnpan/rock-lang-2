@@ -1,4 +1,10 @@
 package rocklang.exception;
 
-public class RockException {
+import rocklang.util.Document;
+
+public class RockException extends Exception {
+
+    public RockException(String message) {
+        super(message);
+    }
 }

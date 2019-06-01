@@ -2,10 +2,14 @@ package test;
 
 import rocklang.ast.AST;
 import rocklang.ast.ASTList;
+import rocklang.exception.RockException;
 import rocklang.parser.Parser;
 import rocklang.parser.Parsers;
 import rocklang.parser.PatternParser;
 import rocklang.parser.TokenParser;
+import rocklang.runtime.Environment;
+import rocklang.runtime.Rock;
+import rocklang.runtime.RockNumber;
 import rocklang.token.Token;
 import rocklang.token.TokenStream;
 import rocklang.token.TokenType;
@@ -25,13 +29,13 @@ public class Tester {
 
 
 
-    public static void main(String[] args) throws IOException {
-        String testFileName = "test-2-parser-2.roc";
+    public static void main(String[] args) throws IOException, RockException {
+        String testFileName = "test-5-multipart.roc";
         File testFile = new File(TEST_DIR, testFileName);
 
         Document document = DocumentReaderUtil.read(testFileName, new FileReader(testFile));
 
-        testParser2(document);
+        testAST1(document);
 
 
     }
@@ -105,6 +109,31 @@ public class Tester {
         return builder.toString();
     }
 
+
+    public static void testAST1(Document document) throws IOException, RockException {
+        TokenStream ts = new TokenStream(document);
+        Parser parser = Parsers.createProgramParser();
+        AST ast = parser.parse(ts);
+        if (ast != null) {
+            ast = ast.simplify();
+        }
+        System.out.println("\n==showAST==");
+        showAST(ast, 0);
+
+        System.out.println("\n==AST.format()==");
+
+        FormatStream fs = new FormatStream(System.out, "    ");
+        if (ast != null) {
+            ast.format(fs);
+        }
+
+        System.out.println("\n==AST.value()==");
+        Environment env = Environment.getDefaultEnvironment();
+        env.set("time", new RockNumber(1000));
+        env.set("half_life", new RockNumber(20));
+        Rock result = ast.value(env, null);
+        System.out.println(result);
+    }
 
 
 }

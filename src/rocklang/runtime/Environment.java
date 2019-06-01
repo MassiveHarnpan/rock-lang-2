@@ -65,6 +65,7 @@ public class Environment {
     public static Environment getDefaultEnvironment() {
         Environment environment = new Environment();
         environment.set("print", new RockFunction(environment, new String[] {"msg"}, Functions.PRINT));
+        environment.set("time", new RockFunction(environment, new String[0], Functions.TIME));
         return environment;
     }
 }

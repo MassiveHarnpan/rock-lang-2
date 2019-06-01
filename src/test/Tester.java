@@ -30,7 +30,7 @@ public class Tester {
 
 
     public static void main(String[] args) throws IOException, RockException {
-        String testFileName = "test-6-funcdef.roc";
+        String testFileName = "test-7-timecast.roc";
         File testFile = new File(TEST_DIR, testFileName);
 
         Document document = DocumentReaderUtil.read(testFileName, new FileReader(testFile));
@@ -129,8 +129,6 @@ public class Tester {
 
         System.out.println("\n==AST.value()==");
         Environment env = Environment.getDefaultEnvironment();
-        env.set("time", new RockNumber(1000));
-        env.set("half_life", new RockNumber(20));
         Rock result = ast.value(env, null);
         System.out.println(result);
     }

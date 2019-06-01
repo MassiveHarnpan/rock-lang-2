@@ -17,7 +17,7 @@ public class VariableName extends ASTLeaf {
     @Override
     public Rock value(Environment env, Rock base) {
         String name = name();
-        return env.has(name) ? env.get(name) : RockNil.NIL;
+        return env.get(name);
     }
 
     @Override

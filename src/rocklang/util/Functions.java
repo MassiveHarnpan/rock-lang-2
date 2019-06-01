@@ -6,6 +6,7 @@ import rocklang.exception.RockException;
 import rocklang.runtime.Environment;
 import rocklang.runtime.Rock;
 import rocklang.runtime.RockNil;
+import rocklang.runtime.RockNumber;
 
 public class Functions {
 
@@ -17,5 +18,12 @@ public class Functions {
         }
     };
 
+
+    public static final AST TIME = new Native() {
+        @Override
+        public Rock value(Environment env, Rock base) throws RockException {
+            return new RockNumber(System.currentTimeMillis());
+        }
+    };
 
 }

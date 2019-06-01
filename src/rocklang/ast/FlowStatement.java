@@ -7,8 +7,8 @@ import rocklang.util.FormatStream;
 
 import java.io.IOException;
 
-public class FlowStatment extends ASTList {
-    public FlowStatment(AST[] children) {
+public class FlowStatement extends ASTList {
+    public FlowStatement(AST[] children) {
         super(children);
     }
 

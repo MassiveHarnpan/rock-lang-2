@@ -1,10 +1,7 @@
 package rocklang.parser;
 
-import javafx.scene.control.ProgressBar;
 import rocklang.ast.*;
 import rocklang.token.TokenType;
-
-import javax.sound.midi.Sequence;
 
 public class Parsers {
 
@@ -158,7 +155,7 @@ public class Parsers {
                 .named("duncDef");
 
 
-        Parser flowStatement = sequence(expr).skip(";").asAST(FlowStatment.class).named("flowStatement");
+        Parser flowStatement = sequence(expr).skip(";").asAST(FlowStatement.class).named("flowStatement");
 
         statement.or(ifStmt).or(flowStatement).named("statement");
 

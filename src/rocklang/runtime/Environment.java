@@ -52,7 +52,8 @@ public class Environment {
 
 
     public Rock set(String variableName, Rock value) {
-        return find(variableName).variables.put(variableName, value);
+        find(variableName).variables.put(variableName, value);
+        return value;
     }
 
     public Rock delete(String variableName) {

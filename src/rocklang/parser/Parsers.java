@@ -123,7 +123,6 @@ public class Parsers {
                 .build()
                 .asAST(Expression.class)
                 .named("logicExpression");
-        expr.or(closedExpression).or(logicExpression).named("expr");
 
 
 
@@ -154,6 +153,8 @@ public class Parsers {
                 .asAST(FuncDef.class)
                 .named("duncDef");
 
+        Parser assign = sequence(multipart).skip("=").then(expr).asAST(Assign.class).named("assign");
+        expr.or(closedExpression).or(assign).or(logicExpression).named("expr");
 
         Parser flowStatement = sequence(expr).skip(";").asAST(FlowStatement.class).named("flowStatement");
 

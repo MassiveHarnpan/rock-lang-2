@@ -21,6 +21,7 @@ public class IdentifierTokenizer extends Tokenizer {
             "(", ")", "[", "]", "{", "}",
             ",", ";", "?", ":", "#", "@", ".",
             "!", "<", ">",
+            "=",
             "if", "else", "while",
             "class", "def", "fn",
     };

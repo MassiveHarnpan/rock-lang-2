@@ -29,6 +29,18 @@ public class Multipart extends ASTList {
     }
 
     @Override
+    public Rock assign(Environment env, Rock base, Rock value) throws RockException {
+        if (childCount() == 1) {
+            return base().assign(env, null, value);
+        }
+        Rock actBase = base().value(env, null);
+        for (int i = 1; i < childCount() - 1; i++) {
+            actBase = child(i).value(env, actBase);
+        }
+        return child(childCount() - 1).assign(env, actBase, value);
+    }
+
+    @Override
     public AST simplify() {
         if (childCount() == 1) {
             return child(0).simplify();

@@ -9,28 +9,34 @@ import java.io.IOException;
 
 import static rocklang.util.Utils.simplifyASTList;
 
-public class FlowStatement extends ASTList {
-    public FlowStatement(AST[] children) {
+public class Assign extends ASTList {
+    public Assign(AST[] children) {
         super(children);
     }
 
-    public AST statement() {
+    public AST key() {
         return child(0);
+    }
+
+    public AST value() {
+        return child(1);
     }
 
     @Override
     public Rock value(Environment env, Rock base) throws RockException {
-        return statement().value(env, null);
+        return key().assign(env, null, value().value(env, null));
     }
+
 
     @Override
     public AST simplify() {
-        return new FlowStatement(simplifyASTList(children()));
+        return new Assign(simplifyASTList(children()));
     }
 
     @Override
     public void format(FormatStream fs) throws IOException {
-        statement().format(fs);
-        fs.print(";");
+        key().format(fs);
+        fs.print(" = ");
+        value().format(fs);
     }
 }

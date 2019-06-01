@@ -34,7 +34,6 @@ public class Program extends ASTList {
     public void format(FormatStream fs) throws IOException {
         for (int i = 0; i < childCount(); i++) {
             child(i).format(fs);
-            fs.print(";");
             fs.newLine();
         }
     }

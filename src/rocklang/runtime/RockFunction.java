@@ -33,4 +33,9 @@ public class RockFunction extends Rock {
         env.set("this", this);
         return functional.value(env, null);
     }
+
+    @Override
+    public String toString() {
+        return "<function>";
+    }
 }

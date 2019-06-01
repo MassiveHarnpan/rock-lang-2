@@ -36,7 +36,6 @@ public class BlockStmt extends ASTList {
         for (int i = 0; i < childCount(); i++) {
             fs.newLine();
             child(i).format(fs);
-            fs.print(";");
         }
         fs.levelDown().newLine().print("}");
     }

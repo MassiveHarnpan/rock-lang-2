@@ -62,7 +62,7 @@ public class Parsers {
 
         Parser parameters = PatternParser.builder()
                 .prefix("(")
-                .element(string)
+                .element(variableName)
                 .splitter(",")
                 .allowEmptyElement()
                 .suffix(")")
@@ -129,21 +129,12 @@ public class Parsers {
         expr.or(closedExpression).or(logicExpression).named("expr");
 
 
-        Parser program = PatternParser.builder()
-                .element(expr)
-                .splitter(";")
-                .allowEmptyElement()
-                .build()
-                .asAST(Program.class)
-                .named("program");
 
 
-
-
-
+        ForkParser statement = fork();
         Parser blockStmt = PatternParser.builder()
                 .prefix("{")
-                .element(literalValue)
+                .element(statement)
                 .splitter(";")
                 .allowEmptyElement()
                 .suffix("}")
@@ -153,11 +144,32 @@ public class Parsers {
 
 
         Parser ifStmt = sequence()
-                .skip("if").then(literalValue).then(blockStmt)
+                .skip("if").then(expr).then(blockStmt)
                 .maybe(sequence().skip("else").then(blockStmt).named("elseStmt"))
                 .asAST(IfStmt.class)
                 .named("ifStmt");
 
+        Parser funcDef = sequence()
+                .skip("def")
+                .then(variableName)
+                .then(parameters)
+                .then(blockStmt)
+                .asAST(FuncDef.class)
+                .named("duncDef");
+
+
+        Parser flowStatement = sequence(expr).skip(";").asAST(FlowStatment.class).named("flowStatement");
+
+        statement.or(ifStmt).or(flowStatement).named("statement");
+
+        Parser programStatement = fork(funcDef, statement).named("programStatement");
+
+        Parser program = PatternParser.builder()
+                .element(programStatement)
+                .allowEmptyElement()
+                .build()
+                .asAST(Program.class)
+                .named("program");
 
 
         return program;

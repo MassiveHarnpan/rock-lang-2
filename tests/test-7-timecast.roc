@@ -1,5 +1,22 @@
-print(time());
+def millis_2_second(millis) {
+    millis / 1000;
+}
 
-print(1.5 ^ 19.66);
+def second() {
+    time() / 1000;
+}
 
-print(time());
+
+start = second();
+print("Start at "..start);
+
+sum = 0;
+for (i = 0; i < 1000; i = i + 1) {
+    sum = sum + i;
+}
+
+end = second();
+print("End at "..end);
+
+print("Time cast is "..(end - start).." s");
+print("Sum(1000) = "..sum);

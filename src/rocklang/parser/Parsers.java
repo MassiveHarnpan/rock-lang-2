@@ -101,7 +101,7 @@ public class Parsers {
         Parser prefix = sequence().then("+", "-", "!").then(term).asAST(Prefix.class).named("prefix");
         Parser numberingExpression = PatternParser.builder()
                 .element(fork(prefix, term))
-                .splitter("+", "-")
+                .splitter("+", "-", "..")
                 .atLeastOneElement()
                 .recordSplitter()
                 .build()
@@ -131,7 +131,6 @@ public class Parsers {
         Parser blockStmt = PatternParser.builder()
                 .prefix("{")
                 .element(statement)
-                .splitter(";")
                 .allowEmptyElement()
                 .suffix("}")
                 .build()
@@ -144,6 +143,20 @@ public class Parsers {
                 .maybe(sequence().skip("else").then(blockStmt).named("elseStmt"))
                 .asAST(IfStmt.class)
                 .named("ifStmt");
+
+        Parser whileStmt = sequence().skip("while")
+                .then(expr)
+                .then(blockStmt)
+                .asAST(WhileStmt.class)
+                .named("whileStmt");
+
+        Parser forStmt = sequence().skip("for").skip("(")
+                .then(expr).skip(";")
+                .then(expr).skip(";")
+                .then(expr).skip(")")
+                .then(blockStmt)
+                .asAST(ForStmt.class)
+                .named("forStmt");
 
         Parser funcDef = sequence()
                 .skip("def")
@@ -158,7 +171,7 @@ public class Parsers {
 
         Parser flowStatement = sequence(expr).skip(";").asAST(FlowStatement.class).named("flowStatement");
 
-        statement.or(ifStmt).or(flowStatement).named("statement");
+        statement.or(ifStmt).or(whileStmt).or(forStmt).or(flowStatement).named("statement");
 
         Parser programStatement = fork(funcDef, statement).named("programStatement");
 

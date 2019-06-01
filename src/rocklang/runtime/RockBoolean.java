@@ -17,6 +17,7 @@ public class RockBoolean extends Rock {
 
     public RockBoolean(boolean bool) {
         super(RockType.BOOLEAN);
+        this.bool = bool;
     }
 
 

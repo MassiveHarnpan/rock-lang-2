@@ -30,7 +30,7 @@ public class Tester {
 
 
     public static void main(String[] args) throws IOException, RockException {
-        String testFileName = "test-8-assign.roc";
+        String testFileName = "test-7-timecast.roc";
         File testFile = new File(TEST_DIR, testFileName);
 
         Document document = DocumentReaderUtil.read(testFileName, new FileReader(testFile));

@@ -10,7 +10,7 @@ import java.util.List;
 
 public abstract class Parser {
 
-    public static boolean debug = false;
+    public static boolean debug = true;
     public static int layer = 0;
 
     protected String name = getClass().getSimpleName();

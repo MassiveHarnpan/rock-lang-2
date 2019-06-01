@@ -71,7 +71,7 @@ public class TokenStream {
         Token token;
         do {
             token = tokenizeAllType();
-            if (token != null) {
+            if (token != null && token.type() != TokenType.COMMENT) {
                 cache.add(token);
             }
         } while (token != null && cache.size() <= target);

@@ -53,6 +53,12 @@ public class Environment {
 
     public Rock set(String variableName, Rock value) {
         find(variableName).variables.put(variableName, value);
+//        variables.put(variableName, value);
+        return value;
+    }
+
+    public Rock setLocal(String variableName, Rock value) {
+        variables.put(variableName, value);
         return value;
     }
 
@@ -60,13 +66,16 @@ public class Environment {
         return find(variableName).variables.remove(variableName);
     }
 
-
-
+    @Override
+    public String toString() {
+        return variables.toString();
+    }
 
     public static Environment getDefaultEnvironment() {
         Environment environment = new Environment();
         environment.set("print", new RockFunction(environment, new String[] {"msg"}, Functions.PRINT));
         environment.set("time", new RockFunction(environment, new String[0], Functions.TIME));
+        environment.set("printEnv", new RockFunction(environment, new String[0], Functions.PRINT_ENV));
         return environment;
     }
 }

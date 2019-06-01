@@ -1,7 +1,3 @@
-def millis_2_second(millis) {
-    millis / 1000;
-}
-
 def second() {
     time() / 1000;
 }

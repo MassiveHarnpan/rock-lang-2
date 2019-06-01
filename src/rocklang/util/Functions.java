@@ -26,4 +26,12 @@ public class Functions {
         }
     };
 
+    public static final AST PRINT_ENV = new Native() {
+        @Override
+        public Rock value(Environment env, Rock base) throws RockException {
+            System.out.println(env);
+            return RockNil.NIL;
+        }
+    };
+
 }

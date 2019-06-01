@@ -28,9 +28,8 @@ public class RockFunction extends Rock {
         }
         Environment env = new Environment(environment);
         for (int i = 0; i < parameters.length; i++) {
-            env.set(parameters[i], arguments[i]);
+            env.setLocal(parameters[i], arguments[i]);
         }
-        env.set("this", this);
         return functional.value(env, null);
     }
 

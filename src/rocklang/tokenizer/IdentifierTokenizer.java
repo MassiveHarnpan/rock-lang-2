@@ -23,7 +23,7 @@ public class IdentifierTokenizer extends Tokenizer {
             "!", "<", ">",
             "=",
             "if", "else", "while", "for",
-            "class", "def", "fn",
+            "class", "def", "fn", "let",
     };
 
 

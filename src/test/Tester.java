@@ -30,7 +30,7 @@ public class Tester {
 
 
     public static void main(String[] args) throws IOException, RockException {
-        String testFileName = "test-10-fibonacci.roc";
+        String testFileName = "test-12-arrow.roc";
         File testFile = new File(TEST_DIR, testFileName);
 
         Document document = DocumentReaderUtil.read(testFileName, new FileReader(testFile));

@@ -44,7 +44,8 @@ public class Parsers {
         Parser string = string().named("string");
         Parser numebr = fork(integer, decimal).named("numebr");
         Parser variableName = new TokenParser(TokenType.NAME).asAST(VariableName.class).named("variableName");
-        Parser literalValue = fork(decimal, integer, string, variableName).named("literalValue");
+
+        ForkParser literalValue = fork();
 
         ForkParser expr = fork();
         Parser arguments = PatternParser.builder()
@@ -68,22 +69,23 @@ public class Parsers {
                 .named("parameters");
 
 
+        SequenceParser arrow = sequence();
+
 
         Parser suffix = fork(arguments).named("suffix");
         Parser closedExpression = sequence().skip("(").then(expr).skip(")").asAST(ClosedExpression.class).named("closedExpression");
+        Parser closedPart = fork(arrow, closedExpression).named("closedPart");
         Parser multipart = sequence()
-                .then(fork(closedExpression, literalValue))
+                .then(fork(closedPart, literalValue))
                 .then(PatternParser.builder().element(suffix).build())
                 .asAST(Multipart.class)
                 .named("multipart");
 
-        Parser basicValue = fork(multipart).named("basicValue");
-
-
-
-        Parser base = fork(closedExpression, basicValue).named("base");
+//        Parser basicValue = fork(multipart).named("basicValue");
+//
+//        Parser base = fork(closedPart, basicValue).named("base");
         Parser powerExpression = PatternParser.builder()
-                .element(base)
+                .element(multipart)
                 .splitter("^")
                 .atLeastOneElement()
                 .recordSplitter()
@@ -126,6 +128,7 @@ public class Parsers {
 
 
 
+        Parser let = sequence().skip("let").then(variableName).asAST(Let.class).named("let");
 
         ForkParser statement = fork();
         Parser blockStmt = PatternParser.builder()
@@ -166,12 +169,24 @@ public class Parsers {
                 .asAST(FuncDef.class)
                 .named("duncDef");
 
-        Parser assign = sequence(multipart).skip("=").then(expr).asAST(Assign.class).named("assign");
-        expr.or(closedExpression).or(assign).or(logicExpression).named("expr");
+        Parser assign = sequence(fork(let, multipart)).skip("=").then(expr).asAST(Assign.class).named("assign");
+        expr.or(assign).or(logicExpression).named("expr");
 
-        Parser flowStatement = sequence(expr).skip(";").asAST(FlowStatement.class).named("flowStatement");
+        Parser flowStatement = sequence(fork(expr, let)).skip(";").asAST(FlowStatement.class).named("flowStatement");
 
         statement.or(ifStmt).or(whileStmt).or(forStmt).or(flowStatement).named("statement");
+
+        Parser arrowParameters = fork(parameters, sequence(variableName).asAST()).named("arrowParameters");
+        Parser arrowBody = fork(blockStmt, expr).named("arrowBody");
+        arrow
+                .then(arrowParameters)
+                .skip("=>")
+                .then(arrowBody)
+                .asAST(Arrow.class)
+                .named("arrow");
+
+        literalValue.or(decimal).or(integer).or(string).or(variableName).named("literalValue");
+
 
         Parser programStatement = fork(funcDef, statement).named("programStatement");
 

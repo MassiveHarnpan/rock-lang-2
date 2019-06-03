@@ -32,6 +32,7 @@ public class PatternParser extends NonTerminateParser {
     protected boolean doParse(TokenStream ts, List<AST> scope) {
         List<AST> res = new ArrayList<>();
         if (prefixParser != null && !prefixParser.parse(ts, res)) {
+            System.out.println("return false");
             return false;
         }
 

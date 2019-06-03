@@ -53,7 +53,6 @@ public class Environment {
 
     public Rock set(String variableName, Rock value) {
         find(variableName).variables.put(variableName, value);
-//        variables.put(variableName, value);
         return value;
     }
 

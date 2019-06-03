@@ -6,6 +6,7 @@ import rocklang.ast.ASTLeaf;
 import rocklang.token.Token;
 import rocklang.token.TokenStream;
 import rocklang.token.TokenType;
+import test.Tester;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -47,11 +48,23 @@ public class TokenParser extends Parser {
 
     @Override
     public boolean parse(TokenStream ts, List<AST> scope) {
+        if (debug) {
+            System.out.print(Tester.makeIndent(layer));
+            System.out.println("expect " + type.name + allowedLiterals);
+        }
         AST ast = parse(ts);
         if (ast != null) {
+            if (debug) {
+                System.out.print(Tester.makeIndent(layer));
+                System.out.println("get "+ ast.token().type().name + ": "+ast.token().literal());
+            }
             scope.add(ast);
             return true;
         } else {
+            if (debug) {
+                System.out.print(Tester.makeIndent(layer));
+                System.out.println("not get " + type.name + ": "+allowedLiterals);
+            }
             return false;
         }
     }

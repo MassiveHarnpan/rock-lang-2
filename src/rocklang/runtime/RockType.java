@@ -10,6 +10,7 @@ public enum RockType {
     ARRAY("array"),
     FUNCTION("function"),
     CLASS("class"),
+    OBJECT("object"),
     CONSTRUCTOR("constructor"),
     ;
 

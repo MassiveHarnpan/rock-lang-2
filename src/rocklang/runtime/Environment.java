@@ -61,6 +61,14 @@ public class Environment {
         return value;
     }
 
+    public Rock getLocal(String variableName) {
+        Rock value = variables.get(variableName);
+        if (value == null) {
+            value = RockNil.NIL;
+        }
+        return value;
+    }
+
     public Rock delete(String variableName) {
         return find(variableName).variables.remove(variableName);
     }

@@ -74,16 +74,12 @@ public class Parsers {
 
         Parser suffix = fork(arguments).named("suffix");
         Parser closedExpression = sequence().skip("(").then(expr).skip(")").asAST(ClosedExpression.class).named("closedExpression");
-        Parser closedPart = fork(arrow, closedExpression).named("closedPart");
         Parser multipart = sequence()
-                .then(fork(closedPart, literalValue))
+                .then(fork(arrow, closedExpression, literalValue))
                 .then(PatternParser.builder().element(suffix).build())
                 .asAST(Multipart.class)
                 .named("multipart");
 
-//        Parser basicValue = fork(multipart).named("basicValue");
-//
-//        Parser base = fork(closedPart, basicValue).named("base");
         Parser powerExpression = PatternParser.builder()
                 .element(multipart)
                 .splitter("^")

@@ -9,4 +9,4 @@ def makeRepeater(count) {
 }
 
 let repeater = makeRepeater(3);
-print(repeater("123-"));
+print(repeater("Hello World!!!  "));

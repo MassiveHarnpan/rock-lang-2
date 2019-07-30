@@ -35,7 +35,7 @@ public class RockClass extends Rock {
 
     @Override
     public Rock invoke(Rock[] arguments) throws RockException {
-        RockObject obj = new RockObject();
+        RockObject obj = new RockObject(this);
         Environment env = new Environment(environment);
         env.setLocal("this", obj);
         return super.invoke(arguments);
